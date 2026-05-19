@@ -1,0 +1,2 @@
+best_model,selection_rule,MAE,RMSE,R2,WAPE,SMAPE,MAPE_nonzero,combined_rank_score,blend_weight,calibration
+xgboost,"weighted combined rank: MAE 45%, WAPE 25%, R2 20%, RMSE 10%",1.1637585598369955,2.1564598904756687,0.7369691170294288,34.75547135533942,33.19163650818697,36.555368733846485,1.0,1.0,"{""method"": ""isotonic"", ""slope"": 1.0, ""intercept"": 0.0, ""residual_adjustment"": ""segment_median:hour,day_of_week,rider_type,station_demand_tier,temperature_level""}"

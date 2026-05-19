@@ -1,0 +1,159 @@
+﻿CSV数据网址：https://s3.amazonaws.com/tripdata/index.html
+
+把数据文件复制到data文件夹
+
+目前建议使用JC-202508-citibike-tripdata.csv到JC-202603-citibike-tripdata.csv，以及202510-citibike-tripdata到202603-citibike-tripdata的CSV数据集
+
+1. 用 PyCharm 打开项目
+
+打开 PyCharm，然后选择：
+
+File -> Open
+
+选择文件夹
+
+ 打开后等待 PyCharm 自动加载和索引项目。
+
+2. 创建或选择 Python 解释器
+
+在 PyCharm 中打开：
+
+File -> Settings -> Project: AAI project 可提交 -> Python Interpreter
+
+如果还没有解释器，点击 Add Interpreter
+本项目使用 Python 3.13.7
+
+3. 打开 PyCharm 终端
+
+在 PyCharm 底部点击：
+
+Terminal
+
+确认终端当前路径是项目文件夹：
+
+如果不是这个路径，运行：
+
+cd "你的文件夹路劲"
+
+4. 安装项目依赖
+
+在 PyCharm Terminal 中运行：
+
+python -m pip install -r requirements.txt
+
+如果提示 pip 版本太旧，可以先运行：
+
+python -m pip install --upgrade pip
+
+然后再运行一次：
+
+python -m pip install -r requirements.txt
+
+5. 启动 Streamlit 网页程序
+
+在 PyCharm Terminal 中运行：
+
+python -m streamlit run app/streamlit_app.py
+
+6. 打开网页
+
+程序启动后，终端里通常会显示本地网页地址，例如：
+
+http://localhost:8501
+
+有时浏览器会自动打开。
+如果没有自动打开，就手动复制下面这个地址到浏览器：
+
+http://localhost:8501
+
+如果网页提示缺少 processed 数据或 model 文件
+
+请确认项目文件夹里有这些文件夹：
+
+models
+processed
+outputs
+
+这个可提交文件夹已经包含运行 App 需要的轻量文件。
+不要把 app、src、models、processed、outputs 这些文件夹单独移出项目。
+
+7.关闭网页程序
+
+回到 PyCharm Terminal，按：
+
+Ctrl + C
+
+这样就可以停止本地 Streamlit 服务。
+
+
+8. 如果需要重新下载 NOAA 天气数据
+
+如果只是打开已经提交的 App，一般不需要重新下载天气数据，因为项目里已经包含：
+
+outputs\external\noaa_nyc_daily_weather.csv
+
+如果新增了 Citi Bike CSV，或者想更新天气时间范围，可以重新下载 NOAA 天气数据。
+
+先在 PyCharm Terminal 中进入项目文件夹：
+
+cd "C:\Users\szzddx\Desktop\AAI project 可提交文件夹"
+
+然后设置 NOAA token：
+
+$env:NOAA_TOKEN="CWxPrSwuzDQqbcgAOnRvxEalDiyrjGjs"
+
+下载当前项目使用的天气时间范围：
+
+python scripts/download_noaa_weather.py --start 2025-月-日 --end 2026-月-日
+
+运行后会生成或覆盖：
+
+outputs\external\noaa_nyc_daily_weather.csv
+
+9. 如果新增了 CSV，需要重新运行 pipeline
+
+把新的 Citi Bike CSV 放进项目里的 data 文件夹：
+
+data\your_new_citibike_file.csv
+
+如果没有 data 文件夹，可以手动新建一个。
+
+然后重新运行 pipeline，把新的骑行数据和 NOAA 天气数据合并进模型：
+
+python scripts/run_pipeline.py --weather outputs/external/noaa_nyc_daily_weather.csv --max-train-rows 0 --selection-metric combined
+
+这一步会重新生成：
+
+processed
+models
+outputs
+
+10. 如果新增 CSV 的日期超过原天气范围
+
+例如新增了 2026 年 4 月的数据，就要把天气下载结束日期改到 2026-04-30：
+
+$env:NOAA_TOKEN="CWxPrSwuzDQqbcgAOnRvxEalDiyrjGjs"
+python scripts/download_noaa_weather.py --start 2025-08-01 --end 2026-04-30
+
+然后再重新运行 pipeline：
+
+python scripts/run_pipeline.py --weather outputs/external/noaa_nyc_daily_weather.csv --max-train-rows 0 --selection-metric combined
+
+11. 重新打开网页
+
+pipeline 运行完成后，再启动网页：
+
+python -m streamlit run app/streamlit_app.py
+
+然后打开：
+
+http://localhost:8501
+
+12. 也可以直接在命令里传 NOAA token
+
+如果不想先设置环境变量，也可以这样运行：
+
+python scripts/download_noaa_weather.py --start 2025-08-01 --end 2026-03-31 --token CWxPrSwuzDQqbcgAOnRvxEalDiyrjGjs
+
+不过推荐使用 $env:NOAA_TOKEN 的方式，因为命令更清楚。
+

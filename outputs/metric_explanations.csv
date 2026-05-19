@@ -1,0 +1,7 @@
+metric,meaning,direction
+MAE,Average absolute error in rides per station-hour,lower is better
+RMSE,Root mean squared error; penalizes large mistakes more strongly,lower is better
+R2,Share of demand variation explained by the model,higher is better
+WAPE,"Total absolute error divided by total actual demand, expressed as percent",lower is better
+SMAPE,Symmetric percentage error that is more stable around low counts,lower is better
+MAPE_nonzero,Mean percentage error on records where actual demand is not zero,lower is better
