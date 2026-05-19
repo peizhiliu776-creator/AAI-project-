@@ -225,10 +225,12 @@ pip install xgboost
 如果需要重新下载 NOAA 天气数据：
 
 ```powershell
-$env:NOAA_TOKEN="NOAA_TOKEN"
-python scripts/download_noaa_weather.py --start 2025-08-01 --end 2026-03-31
-```
-根据需求可以调整时间范围，token 可以用我的：CWxPrSwuzDQqbcgAOnRvxEalDiyrjGjs
+首先去 https://www.ncdc.noaa.gov/cdo-web/token 申请你自己的 NOAA token，然后：
+   
+   $env:NOAA_TOKEN="<your_noaa_token_here>"
+   python scripts/download_noaa_weather.py --start 2025-08-01 --end 2026-03-31
+   
+   根据需求可以调整时间范围。
 
 
 推荐运行完整 pipeline：
